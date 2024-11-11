@@ -20,11 +20,3 @@ resource "aws_route53_record" "website-aaaa-record" {
         evaluate_target_health = false
     }
 }
-
-resource "aws_route53_record" "website-cname-record" {
-    zone_id = var.hosted_zone_id
-    name = "www.${var.domain_name}"
-    type = "CNAME"
-    records = [aws_cloudfront_distribution.website-cloudfront-distribution.domain_name]
-    ttl = 300
-}

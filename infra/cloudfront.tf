@@ -40,6 +40,12 @@ resource "aws_cloudfront_distribution" "website-cloudfront-distribution" {
         }
     }
 
+    logging_config {
+        bucket = aws_s3_bucket.website-s3-logs-bucket.bucket_regional_domain_name
+        include_cookies = false
+        prefix = ""
+    }
+
     price_class = "PriceClass_100"
 
     default_root_object = "index.html"

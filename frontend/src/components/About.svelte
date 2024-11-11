@@ -28,7 +28,8 @@
     <h3>About This Site</h3>
     <p>
         The source code for the site can be found at <a href="https://github.com/joshbarbee/personal-website>"> this GitHub repository</a>. The site is a SPA built with Svelte and Vite, hosted on
-        S3 and CloudFront. This site is the second iteration of an attempt to create a website to monitor how often this domain is visited. Upon visiting this site, your device is uniquely
+        S3 and CloudFront. See the full description of the technology behind the site in the projects section. 
+        This site is the second iteration of an attempt to create a website to monitor how often this domain is visited. Upon visiting this site, your device is uniquely
         fingerprinted and your visiting habits are tracked. Once a day, information regarding site visitors is emailed to me. The initial version of the site was a Lambda which would return a
         basic HTML page, and proxy request metadata to a backend Lambda, however, that version suffered from poor SEO and thus was unable to be indexed by web crawlers.
     </p>

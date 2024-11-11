@@ -23,7 +23,7 @@ resource "aws_s3_bucket_policy" "website-s3-bucket-policy" {
         Statement = [
             {
                 Effect = "Allow"
-                Principal = "*"
+                Principal = aws_cloudfront_distribution.website-cloudfront-distribution.arn
                 Action = "s3:GetObject"
                 Resource = "${aws_s3_bucket.website-s3-bucket.arn}/*"
             }
@@ -44,4 +44,20 @@ resource "aws_s3_object" "website-s3-data" {
     source  = each.value.source_path
     content = each.value.content
     etag = each.value.digests.md5
+}
+
+resource "aws_s3_bucket" "website-s3-logs-bucket" {
+    bucket = "${var.domain_name}-logs"
+
+    tags = {
+        Name = "${var.domain_name}-logs"
+    }
+}
+
+resource "aws_s3_bucket_ownership_controls" "website-s3-logs-bucket-ownership-controls" {
+    bucket = aws_s3_bucket.website-s3-logs-bucket.bucket
+
+    rule {
+        object_ownership = "ObjectWriter"
+    }
 }

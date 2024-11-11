@@ -16,3 +16,9 @@ variable "region" {
     type        = string
     default     = "us-east-1"
 }
+
+variable "email" {
+    description = "The email address to send notifications to"
+    type        = string
+    default     = "joshbarbee1@gmail.com"
+}
