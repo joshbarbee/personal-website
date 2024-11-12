@@ -23,9 +23,16 @@ resource "aws_s3_bucket_policy" "website-s3-bucket-policy" {
         Statement = [
             {
                 Effect = "Allow"
-                Principal = aws_cloudfront_distribution.website-cloudfront-distribution.arn
+                Principal = {
+                    Service = "cloudfront.amazonaws.com"
+                }
                 Action = "s3:GetObject"
                 Resource = "${aws_s3_bucket.website-s3-bucket.arn}/*"
+                Condition = {
+                    StringEquals = {
+                        "aws:SourceArn" = aws_cloudfront_distribution.website-cloudfront-distribution.arn
+                    }
+                }
             }
         ]
     })

@@ -5,6 +5,17 @@ resource "aws_cloudfront_distribution" "website-cloudfront-distribution" {
         origin_access_control_id = aws_cloudfront_origin_access_control.website-cloudfront-oac.id
     }
 
+    origin {
+        domain_name = "${aws_apigatewayv2_api.website-apigateway.id}.execute-api.${var.region}.amazonaws.com"
+        origin_id = aws_apigatewayv2_api.website-apigateway.id
+        custom_origin_config {
+            http_port = 80
+            https_port = 443
+            origin_protocol_policy = "https-only"
+            origin_ssl_protocols = ["TLSv1.2"]
+        }
+    }
+
     aliases = [var.domain_name]
 
     enabled = true
@@ -27,6 +38,28 @@ resource "aws_cloudfront_distribution" "website-cloudfront-distribution" {
         min_ttl                = 0
         default_ttl            = 3600
         max_ttl                = 86400
+    }
+
+    ordered_cache_behavior {
+        path_pattern     = "/api/*"
+        allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+        cached_methods   = ["GET", "HEAD", "OPTIONS"]
+        target_origin_id = aws_apigatewayv2_api.website-apigateway.id
+
+        forwarded_values {
+            query_string = true
+            headers = [ "Origin"]
+
+            cookies {
+                forward = "all"
+            }
+        }
+
+        viewer_protocol_policy = "redirect-to-https"
+        min_ttl                = 0
+        default_ttl            = 600
+        max_ttl                = 1200
+        compress = true
     }
 
     viewer_certificate {

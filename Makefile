@@ -1,19 +1,27 @@
-.PHONY: all package
+.PHONY: all frontend backend plan apply clean destroy
 
 FRONTEND_DIR=frontend
 DIST_DIR=dist
+BACKEND_DIR=backend
+BACKEND_DIST_DIR=$(DIST_DIR)/backend
 
-all: package
+all: apply
 
-package:
+frontend:
 	mkdir -p $(DIST_DIR)
 	cd $(FRONTEND_DIR) && npm install && npm run build
 
-plan: package
+plan: frontend backend
 	cd infra && terraform plan
 
-apply: package
-	cd infra && terraform apply
+apply: frontend backend
+	cd infra && terraform apply -auto-approve
+
+backend:
+	mkdir -p $(BACKEND_DIST_DIR)
+	cp -r $(BACKEND_DIR)/* $(BACKEND_DIST_DIR)
+	cd $(BACKEND_DIST_DIR) && pip install -r requirements.txt -t .
+	cd $(DIST_DIR) && zip -r backend.zip backend
 	
 clean:
 	rm -rf $(DIST_DIR)

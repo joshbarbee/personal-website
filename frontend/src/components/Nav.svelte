@@ -6,9 +6,10 @@
         { id: "blog", text: "Blog" },
         { id: "projects", text: "Projects" },
         { id: "contact", text: "Contact" },
+        { id: "tracking", text: "Tracking" }
     ];
 
-    function handleNavClick(id : String) {
+    function handleNavClick(id : string) {
         selectedNavItem.set(id);
     }
 
@@ -29,9 +30,6 @@
 
 <style>
     div {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
         background-color: var(--background-secondary-color);
         color: var(--primary-color);
         text-align: center;
